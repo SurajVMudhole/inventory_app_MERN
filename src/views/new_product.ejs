@@ -40,4 +40,15 @@
     />
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
+  <%if(errormsg){%>
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <%= errormsg%>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  <%}%>
 </form>

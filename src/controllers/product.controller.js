@@ -7,12 +7,12 @@ export default class ProductController {
     res.render("products", { products: products });
   }
   getAddForm(req, res) {
-    res.render("new_product");
+    res.render("new_product", { errormsg: null });
   }
 
   addProducts(req, res) {
     productModel.add(req.body);
     let products = productModel.get();
-    res.render("products", { products: products });
+    return res.render("products", { products: products });
   }
 }
