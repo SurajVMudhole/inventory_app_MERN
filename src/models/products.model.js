@@ -29,7 +29,7 @@ export default class productModel {
   static delete(id) {
     const index = products.findIndex((p) => p.id == id);
     products.splice(index, 1);
-    return true;
+    return products;
   }
 }
 
