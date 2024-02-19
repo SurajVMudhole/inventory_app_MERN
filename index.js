@@ -23,8 +23,10 @@ server.get("/", productController.getProducts);
 server.get("/new", productController.getAddForm);
 server.post("/", productController.addProducts);
 server.get("/update_product/:id", productController.getUpdateProductView);
+server.post("/update_product", productController.updateProductPost);
+server.get("/delete_product/:id", productController.deleteProduct);
 
 server.listen(port, (err) => {
-    if (err) console.log("Error listening to server: " + err);
-    else console.log(`SERVER listening on port ${port} `);
+  if (err) console.log("Error listening to server: " + err);
+  else console.log(`SERVER listening on port ${port} `);
 });
