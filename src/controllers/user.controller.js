@@ -18,9 +18,10 @@ export default class UserController {
     const logUser = UserModel.getUser(user_email, password);
     if (!logUser) {
       return res
-        .status(403)
+        .status(401)
         .render("/", { errormsg: "Invalid username or password" });
     } else {
+      req.session.userEmail = user_email;
       let products = productModel.get();
       return res.status(200).render("products", { products: products });
     }

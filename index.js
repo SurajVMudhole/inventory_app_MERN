@@ -2,9 +2,11 @@ import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
 import ejsLayouts from "express-ejs-layouts";
+import session from "express-session";
 import { uploadFile } from "./src/middlewares/file_upload.middleware.js";
 import ProductController from "./src/controllers/product.controller.js";
 import UserController from "./src/controllers/user.controller.js";
+import { auth } from "./src/middlewares/auth.middleware.js";
 const server = express();
 const port = 8000;
 //set view engine
@@ -21,18 +23,31 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.use(express.static("src/views"));
 server.use(express.static("public"));
+server.use(
+  session({
+    secret: "SecretKey",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  })
+);
 
 //authentication
 server.get("/register", userController.getRegister);
 server.get("/login", userController.getLogin);
 server.post("/register", userController.postRegister);
 server.post("/login", userController.postLogin);
-server.get("/", productController.getProducts);
-server.get("/new", productController.getAddForm);
-server.post("/", uploadFile.single("imageUrl"), productController.addProducts);
-server.get("/update_product/:id", productController.getUpdateProductView);
-server.post("/update_product", productController.updateProductPost);
-server.post("/delete_product/:id", productController.deleteProduct);
+server.get("/", auth, productController.getProducts);
+server.get("/new", auth, productController.getAddForm);
+server.post(
+  "/",
+  auth,
+  uploadFile.single("imageUrl"),
+  productController.addProducts
+);
+server.get("/update_product/:id", auth, productController.getUpdateProductView);
+server.post("/update_product", auth, productController.updateProductPost);
+server.post("/delete_product/:id", auth, productController.deleteProduct);
 
 server.listen(port, (err) => {
   if (err) console.log("Error listening to server: " + err);
