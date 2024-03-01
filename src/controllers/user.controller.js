@@ -19,11 +19,23 @@ export default class UserController {
     if (!logUser) {
       return res
         .status(401)
-        .render("/", { errormsg: "Invalid username or password" });
+        .send("/", { errormsg: "Invalid username or password" });
     } else {
       req.session.userEmail = user_email;
       let products = productModel.get();
-      return res.status(200).render("products", { products: products });
+      return res.status(200).render("products", {
+        products: products,
+        userEmail: req.session.userEmail,
+      });
     }
+  }
+  getLogout(req, res) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.status(500).send("Internal Server Error");
+      }
+      res.redirect("/login");
+    });
   }
 }
